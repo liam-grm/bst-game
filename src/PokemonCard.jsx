@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import StatBars from './StatBars';
-import Types from './Types'
+import Types from './Types';
+import Shape from './Shape'; 
+import Abilities from './Abilities';
 
 function PokemonCard() {
   const [input, setInput] = useState('');
@@ -89,7 +91,7 @@ function PokemonCard() {
             <div className="shape-type-panel">
 
               <div className="shape-panel">
-                Shape
+                <img src={`/shapes/${extraData.shape.name}.png`} />
               </div>
 
               <div className="type-panel">
@@ -99,8 +101,16 @@ function PokemonCard() {
             </div>
 
             {/* RIGHT SIDE (TOP) */}
+
             <div className="abilities-panel">
-              Abilities
+              <div className="abilities-title">
+               Abilities
+              </div>
+
+              <div className="abilities-panel2">
+                 <Abilities abilities={pokemon.abilities}/>
+              </div>  
+             
             </div>
 
           </div>
