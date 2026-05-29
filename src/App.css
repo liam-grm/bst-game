@@ -1,0 +1,16 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.bst {
+  max-width: 1800px;
+  margin-left: 0px;
+  margin-right:0px;
+  margin-top: 0px;
+  padding: 2rem;
+  text-align: left;
+}
+
