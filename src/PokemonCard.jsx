@@ -65,20 +65,71 @@ function PokemonCard() {
   // MAIN DIV
 
   return (
+ 
+    <div className = "page-layout">  {/* This div is the high-level container */}
 
-    //Base Stat Total Div
-    <div class = "bst">
-      <button onClick={handleClick} title="Test Me" color="#841584"> Test Me </button> 
+    <button onClick={handleClick} title="Test Me" color="#841584"> Test Me </button> 
 
+    <div className = "information-card"> 
+      
       {error && <p>{error}</p>}
 
       {/*With the fetched data, handle the card*/}
       {pokemon && extraData && (
       <>
 
-        <StatBars stats={pokemon.stats} />
 
-        <Types types={pokemon.types}/>
+        {/* LEFT SIDE */}
+        <div className="left-column">
+
+          {/* TOP HALF */}
+          <div className="top-info-panel">
+
+            {/* LEFT SIDE (TOP)*/}
+            <div className="shape-type-panel">
+
+              <div className="shape-panel">
+                Shape
+              </div>
+
+              <div className="type-panel">
+                <Types types={pokemon.types} />
+              </div>
+
+            </div>
+
+            {/* RIGHT SIDE (TOP) */}
+            <div className="abilities-panel">
+              Abilities
+            </div>
+
+          </div>
+
+          {/* BOTTOM HALF */}
+          <div className ="moveset-panel">
+            <div className="moveset-title">
+              Potential moveset
+            </div>
+
+            <div className = "moves-grid">
+              <div className = "move-panel"> penis </div>
+              <div className = "move-panel"> schlock </div>
+              <div className = "move-panel"> wang </div>
+              <div className = "move-panel"> rod </div>
+            </div>
+
+        </div>
+
+        </div>
+
+        <div className = "right-column">
+
+          <div className = "bst">
+            <StatBars stats={pokemon.stats} />
+          </div>
+          
+        </div>
+
         
         {/* {pokemon.types.map((type) => (
         <p key={type.type.name}>
@@ -90,12 +141,19 @@ function PokemonCard() {
       )}
 
     {/* Empty class */}
-    <div className = "bst">
-      
-    </div>
-    
-    {/* Answer Form */}
 
+    
+
+
+
+
+
+
+
+    </div>
+
+    <div className = "guess-section">
+    {/* Answer Form */}
       <form onSubmit={handleSubmit}>
         <input value={input} onChange={(e) => setInput(e.target.value)} />
         <button type="submit">Guess</button>
@@ -103,7 +161,7 @@ function PokemonCard() {
       <div>
         {message}
       </div>
-
+    </div>
 
     </div>
   );

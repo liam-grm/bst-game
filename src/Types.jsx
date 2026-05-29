@@ -2,18 +2,22 @@ import { getTypeStyle } from './statUtils';
 
 function Types({ types = [] }) {
   return (
-    <div>
-      {types.map((typeObj) => {
+    <p>
+      {types.map((typeObj, index) => {
         const typeName = typeObj.type.name;
         const { color } = getTypeStyle(typeName);
-
         return (
-          <div key={typeName}>
-            <p style={{ color }}>{typeName}</p>
-          </div>
+          <span
+            key={typeName}
+            className = "type-label"
+            style={{ color }}
+          >
+            {typeName.toUpperCase()}
+            {index < types.length - 1 && ' '}
+          </span>
         );
       })}
-    </div>
+    </p>
   );
 }
 

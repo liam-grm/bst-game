@@ -5,12 +5,177 @@
   text-align: center;
 }
 
-.bst {
-  max-width: 1800px;
-  margin-left: 0px;
-  margin-right:0px;
-  margin-top: 0px;
-  padding: 2rem;
+.page-layout {
+  display: flex;
+  flex-direction: column;
+
+  gap: 1rem;
+
+  align-items: center;
+}
+
+.information-card
+{
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  gap: 1rem;
+
+  height: auto;
+
+  padding: 1rem;
+
+  width: 1200px;
+
+}
+
+.left-column {
+  display: grid;
+
+  grid-template-rows:
+    1fr
+    1fr;
+
+  gap: 1rem;
+  min-width: 0;
+  
+}
+
+.top-info-panel {
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  gap: 1rem;
+
+  min-width: 0;
+}
+
+.shape-type-panel {
+  display: grid;
+
+  grid-template-rows:
+    2fr
+    1fr;
+
+  gap: 1rem;
+
+  min-height: 0;
+}
+
+.moveset-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  height: 12;
+}
+
+.moves-grid {
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  grid-template-rows:
+    1fr
+    1fr;
+
+  gap: 1rem;
+
+  min-height: 0;
+}
+
+.move-tile {
+  border-radius: 12px;
+
+  padding: 1rem;
+
+  background: rgba(255,255,255,0.05);
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.moveset-panel {
+  display: grid;
+
+  grid-template-rows:
+    auto
+    1fr;
+
+  gap: 1rem;
+
+  min-height: 0;
+}
+
+.right-column {
+  display: grid;
+
+  grid-template-rows:
+    3fr
+    1fr;
+
+  gap: 1rem;
+  min-width: 0;
+  
   text-align: left;
 }
 
+.bst {
+
+  text-align: left;
+  padding: 2rem;
+  background: rgba(0,0,0,0.015);
+  border-radius: 12px;
+}
+
+
+
+.total-stats {
+  margin-top: 1rem;
+  font-weight: 700;
+}
+
+.guess-section {
+  width: 100%;
+  max-width: 1200px;
+
+  padding: 1rem;
+
+  border-radius: 12px;
+}
+
+
+div {
+  outline: 1px solid rgba(0,0,0,0.0);
+}
+
+.shape-panel,
+.type-panel,
+.abilities-panel,
+.moveset-panel,
+.move-panel {
+  border-radius: 12px;
+
+  padding: 1rem;
+
+  background: rgba(0,0,0,0.015);
+
+  min-width: 0;
+  min-height: 0;
+}
+
+.type-label {
+  font-size: 1.2rem;
+  font-weight: 700;
+  height: 12;
+}
