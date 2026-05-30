@@ -1,4 +1,5 @@
 import { getStatStyle } from './statUtils';
+import { formatText } from './statUtils';
 
 function StatBars({ stats }) {
 
@@ -15,14 +16,14 @@ function StatBars({ stats }) {
         return (
           <div key={stat.stat.name}>
             <p>
-              {stat.stat.name}: {stat.base_stat}
+              {formatText(stat.stat.name)}: {stat.base_stat}
             </p>
 
             <div
               style={{
                 width,
                 backgroundColor: color,
-                height: '3px'
+                height: '6px'
               }}
             />
           </div>

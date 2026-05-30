@@ -28,7 +28,7 @@
   height: auto;
 
 
-  width: 1200px;
+  width: 800px;
 
 }
 
@@ -121,7 +121,6 @@
   display: grid;
 
   grid-template-rows:
-    3fr
     1fr;
 
   gap: 1rem;
@@ -155,8 +154,7 @@
 
 
 .type-panel,
-.moveset-panel,
-.move-panel {
+.moveset-panel {
   border-radius: 12px;
 
   padding: 1rem;
@@ -164,6 +162,18 @@
 
   min-width: 0;
   min-height: 0;
+}
+
+.move-panel {
+  border-radius: 12px;
+  padding: 1rem;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: black;
 }
 
 .abilities-panel{

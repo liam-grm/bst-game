@@ -3,13 +3,16 @@ import StatBars from './StatBars';
 import Types from './Types';
 import Shape from './Shape'; 
 import Abilities from './Abilities';
+import getRandomMoves from './statUtils';
+import Moveset from './Moveset';
 
 function PokemonCard() {
   const [input, setInput] = useState('');
   const [pokemon, setPokemon] = useState(null);
   const [extraData, setExtraData] = useState(null);
   const [error, setError] = useState('');
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState('');
+  const [moveset, setMoveset] = useState([]);
   const ColoredLine = ({ color }) => (
     <hr
         style={{
@@ -43,6 +46,9 @@ function PokemonCard() {
       const extra = await species_res.json();
       setExtraData(extra);
 
+      const moves = await getMoveTypes(data.moves);
+      setMoveset(moves);
+
     } catch {
       setError('Pokemon not found');
     }
@@ -63,6 +69,25 @@ function PokemonCard() {
     }
 
     }
+
+  async function getMoveTypes(moves) {
+    setMoveset([]);
+    const randomMoves = getRandomMoves(moves, 4)
+    const moveData = await Promise.all(
+      randomMoves.map(async (moveObj) => {
+        const res = await fetch(moveObj.move.url);
+        const data = await res.json();
+
+        return {
+          name: data.name,
+          type: data.type.name,
+          power: data.power
+        };
+      })
+    );
+
+    return moveData;
+  }
 
   // MAIN DIV
 
@@ -122,10 +147,11 @@ function PokemonCard() {
             </div>
 
             <div className = "moves-grid">
-              <div className = "move-panel"> penis </div>
+              <Moveset moveset = {moveset}></Moveset>
+              {/*<div className = "move-panel"> penis </div>
               <div className = "move-panel"> schlock </div>
               <div className = "move-panel"> wang </div>
-              <div className = "move-panel"> rod </div>
+              <div className = "move-panel"> rod </div>*/}
             </div>
 
         </div>
