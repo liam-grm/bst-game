@@ -20,13 +20,13 @@ export function getTypeStyle(typeValue) {
   else if (['electric'].includes(typeValue)) color = 'gold';
   else if (['grass'].includes(typeValue)) color = '#3fa129';
   else if (['ice'].includes(typeValue)) color = '#A0F8F8';
-  else if (['fighting'].includes(typeValue)) color = '#C63129';
-  else if (['poison'].includes(typeValue)) color = '#9040CC';
+  else if (['fighting'].includes(typeValue)) color = '#cb5f48 ';
+  else if (['poison'].includes(typeValue)) color = '#b468b7 ';
   else if (['ground'].includes(typeValue)) color = '#E7BD6B';
   else if (['flying'].includes(typeValue)) color = '#9CADF7 ';
   else if (['psychic'].includes(typeValue)) color = 'hotpink';
   else if (['bug'].includes(typeValue)) color = '#ADBD21';
-  else if (['rock'].includes(typeValue)) color = 'darkgoldenrod';
+  else if (['rock'].includes(typeValue)) color = '#B8A038';
   else if (['ghost'].includes(typeValue)) color = '#846ab6 ';
   else if (['dragon'].includes(typeValue)) color = '#7038F8 ';
   else if (['dark'].includes(typeValue)) color = '#705849 ';

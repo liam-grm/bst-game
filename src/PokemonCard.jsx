@@ -3,7 +3,9 @@ import StatBars from './StatBars';
 import Types from './Types';
 import Shape from './Shape'; 
 import Abilities from './Abilities';
+import GenerationInfo from './GenerationInfo';
 import getRandomMoves from './statUtils';
+import { formatText } from './statUtils';
 import Moveset from './Moveset';
 
 function PokemonCard() {
@@ -13,6 +15,7 @@ function PokemonCard() {
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
   const [moveset, setMoveset] = useState([]);
+  const [generationInfo, setGenerationInfo] = useState([]);
   const ColoredLine = ({ color }) => (
     <hr
         style={{
@@ -49,6 +52,9 @@ function PokemonCard() {
       const moves = await getMoveTypes(data.moves);
       setMoveset(moves);
 
+      const generationInfo = await getGenerationInfo(extra.generation);
+      setGenerationInfo(generationInfo);
+
     } catch {
       setError('Pokemon not found');
     }
@@ -65,7 +71,7 @@ function PokemonCard() {
       setMessage ('Correct!')
     }
     else{
-      setMessage (`Wrong! The Pokemon is ${pokemon.name}`)
+      setMessage (`Wrong! The Pokemon is ${formatText(pokemon.name)}`)
     }
 
     }
@@ -87,6 +93,14 @@ function PokemonCard() {
     );
 
     return moveData;
+  }
+
+  async function getGenerationInfo(generation){
+    setGenerationInfo([]);
+    const res = await fetch(generation.url);
+    const data = await res.json();
+    const generationNum = (data.id)
+    return generationNum
   }
 
   // MAIN DIV
@@ -160,8 +174,17 @@ function PokemonCard() {
 
         <div className = "right-column">
 
+              
+          {/* Top element of right column (bst) */}
           <div className = "bst">
             <StatBars stats={pokemon.stats} />
+          </div>
+
+          {/* Bottom element of right column (region info) */}
+          <div className = "generation-panel">
+            <div className = "generation-text">
+              <span> <GenerationInfo generationProp={generationInfo}/> </span>
+            </div>
           </div>
           
         </div>
