@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { use, useState } from 'react';
 import StatBars from './StatBars';
 import Types from './Types';
 import Shape from './Shape'; 
@@ -33,9 +33,11 @@ function PokemonCard() {
     setPokemon(null);
     setExtraData(null);
     setMessage('');
+    setGenerationInfo([]);
 
     const max = 1025;
     const rand = (Math.floor(Math.random() * max));
+
 
 
     try {
@@ -55,9 +57,14 @@ function PokemonCard() {
       const generationInfo = await getGenerationInfo(extra.generation);
       setGenerationInfo(generationInfo);
 
+
+
     } catch {
       setError('Pokemon not found');
     }
+
+    setShowGuessSection(true);
+          
 
   }
 
@@ -211,16 +218,22 @@ function PokemonCard() {
 
     </div>
 
+    {pokemon && (
     <div className = "guess-section">
     {/* Answer Form */}
       <form onSubmit={handleSubmit}>
-        <input value={input} onChange={(e) => setInput(e.target.value)} />
-        <button type="submit">Guess</button>
+        <span className='guess-row'>
+          <input value={input} onChange={(e) => setInput(e.target.value)} />
+          <button type="submit">Guess</button>
+        </span>
       </form>
       <div>
         {message}
       </div>
     </div>
+  )}
+    
+
 
     </div>
   );
