@@ -1,14 +1,14 @@
-import {formatText} from './statUtils';
+import { formatText } from './statUtils';
 
 function Abilities({ abilities = [] }) {
   return (
-    <div>
-      {abilities.map((ability) => (
-        <p key={ability.ability.name}>
-          {formatText(ability.ability.name)}
-        </p>
+    <ul className="ability-list">
+      {abilities.map((entry) => (
+        <li key={entry.ability.name}>
+          {formatText(entry.ability.name)}
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }
 

@@ -1,6 +1,12 @@
-export function getStatStyle(statValue) {
-    const width = Math.min((statValue / 255) * 600, 600);
+export const MAX_BASE_STAT = 255;
 
+/** Fill ratio for stat bars: 255 → 100%, 127.5 → 50%, etc. */
+export function getStatBarFillPercent(statValue) {
+  const ratio = Math.min(statValue / MAX_BASE_STAT, 1);
+  return `${ratio * 100}%`;
+}
+
+export function getStatStyle(statValue) {
   let color = 'red';
   if (statValue >= 150) color = 'cyan';
   else if (statValue >= 120) color = 'forestgreen';
@@ -8,45 +14,45 @@ export function getStatStyle(statValue) {
   else if (statValue >= 60) color = 'yellow';
   else if (statValue >= 30) color = 'orange';
 
-  return { width, color };
+  return {
+    fillPercent: getStatBarFillPercent(statValue),
+    color,
+  };
 }
-
 export function getTypeStyle(typeValue) {
-  let color = 'black';
+  const typeColors = {
+    normal: '#C6C3A5',
+    fire: '#FF612C',
+    water: 'deepskyblue',
+    electric: '#e5c531',
+    grass: '#3fa129',
+    ice: '#A0F8F8',
+    fighting: '#cb5f48',
+    poison: '#b468b7',
+    ground: '#E7BD6B',
+    flying: '#9CADF7',
+    psychic: 'hotpink',
+    bug: '#ADBD21',
+    rock: '#B8A038',
+    ghost: '#846ab6',
+    dragon: '#7038F8',
+    dark: '#705849',
+    steel: '#BDBDD6',
+    fairy: 'pink',
+  };
 
-  if (['normal'].includes(typeValue)) color = '#C6C3A5';
-  else if (['fire'].includes(typeValue)) color = '#FF612C';
-  else if (['water'].includes(typeValue)) color = 'deepskyblue';
-  else if (['electric'].includes(typeValue)) color = 'gold';
-  else if (['grass'].includes(typeValue)) color = '#3fa129';
-  else if (['ice'].includes(typeValue)) color = '#A0F8F8';
-  else if (['fighting'].includes(typeValue)) color = '#cb5f48 ';
-  else if (['poison'].includes(typeValue)) color = '#b468b7 ';
-  else if (['ground'].includes(typeValue)) color = '#E7BD6B';
-  else if (['flying'].includes(typeValue)) color = '#9CADF7 ';
-  else if (['psychic'].includes(typeValue)) color = 'hotpink';
-  else if (['bug'].includes(typeValue)) color = '#ADBD21';
-  else if (['rock'].includes(typeValue)) color = '#B8A038';
-  else if (['ghost'].includes(typeValue)) color = '#846ab6 ';
-  else if (['dragon'].includes(typeValue)) color = '#7038F8 ';
-  else if (['dark'].includes(typeValue)) color = '#705849 ';
-  else if (['steel'].includes(typeValue)) color = '#BDBDD6 ';
-  else if (['fairy'].includes(typeValue)) color = 'pink';
-  
-
-  return { color };
+  return { color: typeColors[typeValue] ?? 'black' };
 }
 
-function getRandomMoves(moves, count = 4) {
+export function getRandomMoves(moves, count = 4) {
   const shuffled = [...moves].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, count);
 }
 
-export default getRandomMoves
+export default getRandomMoves;
 
 export function formatText(text) {
   return text
     .replace(/-/g, ' ')
-    .replace(/\b\w/g, c => c.toUpperCase());
-    
+    .replace(/\b\w/g, (character) => character.toUpperCase());
 }

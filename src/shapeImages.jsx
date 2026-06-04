@@ -12,6 +12,9 @@ import squiggle from './assets/shapes/squiggle.png';
 import upright from './assets/shapes/upright.png';
 import wings from './assets/shapes/wings.png';
 
+const SHAPE_NAME_ALIASES = {
+  'bug-wings': 'bugwings',
+};
 
 export const shapeImages = {
   armor,
@@ -26,5 +29,9 @@ export const shapeImages = {
   quadruped,
   squiggle,
   upright,
-  wings
+  wings,
 };
+
+export function resolveShapeKey(apiShapeName) {
+  return SHAPE_NAME_ALIASES[apiShapeName] ?? apiShapeName;
+}

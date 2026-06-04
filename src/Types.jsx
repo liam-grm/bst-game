@@ -2,22 +2,22 @@ import { getTypeStyle } from './statUtils';
 
 function Types({ types = [] }) {
   return (
-    <p>
-      {types.map((typeObj, index) => {
+    <ul className="type-list">
+      {types.map((typeObj) => {
         const typeName = typeObj.type.name;
         const { color } = getTypeStyle(typeName);
+
         return (
-          <span
+          <li
             key={typeName}
-            className = "type-label"
-            style={{ color }}
+            className="type-badge"
+            style={{ backgroundColor: color }}
           >
-            {typeName.toUpperCase()}
-            {index < types.length - 1 && ' '}
-          </span>
+            {typeName}
+          </li>
         );
       })}
-    </p>
+    </ul>
   );
 }
 

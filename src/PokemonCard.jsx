@@ -1,242 +1,125 @@
-import { use, useState } from 'react';
 import StatBars from './StatBars';
 import Types from './Types';
-import Shape from './Shape'; 
+import Shape from './Shape';
 import Abilities from './Abilities';
 import GenerationInfo from './GenerationInfo';
-import getRandomMoves from './statUtils';
-import { formatText } from './statUtils';
 import Moveset from './Moveset';
+import { usePokemonGame } from './hooks/usePokemonGame';
+
+function guessMessageClass(message) {
+  if (!message) return '';
+  if (message.startsWith('Correct')) return 'guess-message--correct';
+  if (message.startsWith('Wrong')) return 'guess-message--wrong';
+  return '';
+}
 
 function PokemonCard() {
-  const [input, setInput] = useState('');
-  const [pokemon, setPokemon] = useState(null);
-  const [extraData, setExtraData] = useState(null);
-  const [error, setError] = useState('');
-  const [message, setMessage] = useState('');
-  const [moveset, setMoveset] = useState([]);
-  const [generationInfo, setGenerationInfo] = useState([]);
-  const ColoredLine = ({ color }) => (
-    <hr
-        style={{
-            color: color,
-            backgroundColor: color,
-            height: 5
-        }}
-    />
-);
-
-  // Function to handle generating/fetching the pokemon
-  async function handleClick(e) {
-    e.preventDefault();
-    setError('');
-    setPokemon(null);
-    setExtraData(null);
-    setMessage('');
-    setGenerationInfo([]);
-
-    const max = 1025;
-    const rand = (Math.floor(Math.random() * max));
-
-
-
-    try {
-      const pokemon_res = await fetch(`https://pokeapi.co/api/v2/pokemon/${rand}`);
-      if (!pokemon_res.ok) throw new Error('Not found');
-      const data = await pokemon_res.json();
-      setPokemon(data);
-
-      const species_res = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${data && data.id}`);
-      if (!species_res.ok) throw new Error('Not found');
-      const extra = await species_res.json();
-      setExtraData(extra);
-
-      const moves = await getMoveTypes(data.moves);
-      setMoveset(moves);
-
-      const generationInfo = await getGenerationInfo(extra.generation);
-      setGenerationInfo(generationInfo);
-
-
-
-    } catch {
-      setError('Pokemon not found');
-    }
-
-    setShowGuessSection(true);
-          
-
-  }
-
-  // Function to handle the submission of user's answer
-
-  async function handleSubmit(e){
-    e.preventDefault();
-
-
-    if ((input.toLowerCase()) === pokemon.name){
-      setMessage ('Correct!')
-    }
-    else{
-      setMessage (`Wrong! The Pokemon is ${formatText(pokemon.name)}`)
-    }
-
-    }
-
-  async function getMoveTypes(moves) {
-    setMoveset([]);
-    const randomMoves = getRandomMoves(moves, 4)
-    const moveData = await Promise.all(
-      randomMoves.map(async (moveObj) => {
-        const res = await fetch(moveObj.move.url);
-        const data = await res.json();
-
-        return {
-          name: data.name,
-          type: data.type.name,
-          power: data.power
-        };
-      })
-    );
-
-    return moveData;
-  }
-
-  async function getGenerationInfo(generation){
-    setGenerationInfo([]);
-    const res = await fetch(generation.url);
-    const data = await res.json();
-    const generationNum = (data.id)
-    return generationNum
-  }
-
-  // MAIN DIV
+  const {
+    input,
+    setInput,
+    pokemon,
+    species,
+    error,
+    message,
+    moveset,
+    generation,
+    loading,
+    rollPokemon,
+    submitGuess,
+    isCardReady,
+  } = usePokemonGame();
 
   return (
- 
-    <div className = "page-layout">  {/* This div is the high-level container */}
+    <div className="page-layout">
+      <button
+        type="button"
+        className="btn btn-primary btn-roll"
+        onClick={rollPokemon}
+        disabled={loading}
+        title="Roll a random Pokémon"
+      >
+        {loading ? 'Loading…' : 'New Pokémon'}
+      </button>
 
-    <button onClick={handleClick} title="Test Me" color="#841584"> Test Me </button> 
+      <div className="game-card">
+        {error && <p className="error-message">{error}</p>}
 
-    <div className = "information-card"> 
-      
-      {error && <p>{error}</p>}
+        {isCardReady && (
+          <div className="information-card">
+            <section className="left-top" aria-label="Pokémon profile">
+              <div className="top-info-panel">
+                <div className="profile-row">
+                  <div className="shape-panel panel">
+                    <Shape shape={species.shape.name} />
+                  </div>
 
-      {/*With the fetched data, handle the card*/}
-      {pokemon && extraData && (
-      <>
+                  <div className="abilities-panel panel">
+                    <h2 className="section-title">Abilities</h2>
+                    <Abilities abilities={pokemon.abilities} />
+                  </div>
+                </div>
 
+                <div className="types-row panel">
+                  <Types types={pokemon.types} />
+                </div>
+              </div>
+            </section>
 
-        {/* LEFT SIDE */}
-        <div className="left-column">
+            <h2 className="moveset-title section-title">Potential moveset</h2>
 
-          {/* TOP HALF */}
-          <div className="top-info-panel">
+            <div className="moves-grid panel" aria-label="Potential moveset">
+              <Moveset moveset={moveset} />
+            </div>
 
-            {/* LEFT SIDE (TOP)*/}
-            <div className="shape-type-panel">
-
-              <div className="shape-panel">
-                <img src={`/shapes/${extraData.shape.name}.png`} />
+            <div className="right-column">
+              <div className="bst panel">
+                <h2 className="section-title bst-title">Base stats</h2>
+                <StatBars stats={pokemon.stats} />
               </div>
 
-              <div className="type-panel">
-                <Types types={pokemon.types} />
+              <div className="generation-panel panel">
+                <GenerationInfo generationProp={generation} />
               </div>
-
-            </div>
-
-            {/* RIGHT SIDE (TOP) */}
-
-            <div className="abilities-panel">
-              <div className="abilities-title">
-               Abilities
-              </div>
-
-              <div className="abilities-panel2">
-                 <Abilities abilities={pokemon.abilities}/>
-              </div>  
-             
-            </div>
-
-          </div>
-
-          {/* BOTTOM HALF */}
-          <div className ="moveset-panel">
-            <div className="moveset-title">
-              Potential moveset
-            </div>
-
-            <div className = "moves-grid">
-              <Moveset moveset = {moveset}></Moveset>
-              {/*<div className = "move-panel"> penis </div>
-              <div className = "move-panel"> schlock </div>
-              <div className = "move-panel"> wang </div>
-              <div className = "move-panel"> rod </div>*/}
-            </div>
-
-        </div>
-
-        </div>
-
-        <div className = "right-column">
-
-              
-          {/* Top element of right column (bst) */}
-          <div className = "bst">
-            <StatBars stats={pokemon.stats} />
-          </div>
-
-          {/* Bottom element of right column (region info) */}
-          <div className = "generation-panel">
-            <div className = "generation-text">
-              <span> <GenerationInfo generationProp={generationInfo}/> </span>
             </div>
           </div>
-          
-        </div>
+        )}
 
-        
-        {/* {pokemon.types.map((type) => (
-        <p key={type.type.name}>
-          {type.type.name}
-        </p>
-        ))} */}
-
-      </>
-      )}
-
-    {/* Empty class */}
-
-    
-
-
-
-
-
-
-
-    </div>
-
-    {pokemon && (
-    <div className = "guess-section">
-    {/* Answer Form */}
-      <form onSubmit={handleSubmit}>
-        <span className='guess-row'>
-          <input value={input} onChange={(e) => setInput(e.target.value)} />
-          <button type="submit">Guess</button>
-        </span>
-      </form>
-      <div>
-        {message}
+        {!isCardReady && !error && (
+          <p className="game-placeholder">
+            Press <strong>New Pokémon</strong> to start your round.
+          </p>
+        )}
       </div>
-    </div>
-  )}
-    
 
-
+      {pokemon && (
+        <div className="guess-section panel">
+          <form onSubmit={submitGuess}>
+            <div className="guess-row">
+              <label className="visually-hidden" htmlFor="pokemon-guess">
+                Guess the Pokémon
+              </label>
+              <input
+                id="pokemon-guess"
+                className="guess-input"
+                value={input}
+                onChange={(event) => setInput(event.target.value)}
+                placeholder="Who's that Pokémon?"
+                autoComplete="off"
+              />
+              <button type="submit" className="btn btn-primary">
+                Guess
+              </button>
+            </div>
+          </form>
+          {message && (
+            <p className={`guess-message ${guessMessageClass(message)}`}>
+              {message}
+            </p>
+          )}
+        </div>
+      )}
     </div>
   );
 }
 
-export default PokemonCard
+export default PokemonCard;

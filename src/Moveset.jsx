@@ -1,5 +1,4 @@
-import {formatText} from './statUtils';
-import { getTypeStyle } from './statUtils';
+import { formatText, getTypeStyle } from './statUtils';
 
 function Moveset({ moveset = [] }) {
   return (
@@ -8,9 +7,7 @@ function Moveset({ moveset = [] }) {
         <div
           key={move.name}
           className="move-panel"
-          style={{
-            backgroundColor: getTypeStyle(move.type).color
-          }}
+          style={{ backgroundColor: getTypeStyle(move.type).color }}
         >
           {formatText(move.name)}
         </div>
