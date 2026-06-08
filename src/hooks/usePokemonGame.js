@@ -1,4 +1,5 @@
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
+import axios from 'axios';
 import getRandomMoves, { formatText } from '../statUtils';
 
 const MAX_POKEMON_ID = 1025;
@@ -39,6 +40,8 @@ export function usePokemonGame() {
   const [moveset, setMoveset] = useState([]);
   const [generation, setGeneration] = useState(null);
   const [loading, setLoading] = useState(false);
+
+
 
   const rollPokemon = useCallback(async () => {
     setLoading(true);

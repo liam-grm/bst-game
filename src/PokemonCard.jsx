@@ -4,6 +4,7 @@ import Shape from './Shape';
 import Abilities from './Abilities';
 import GenerationInfo from './GenerationInfo';
 import Moveset from './Moveset';
+//import BackendApi from './BackendApi';
 import { usePokemonGame } from './hooks/usePokemonGame';
 
 function guessMessageClass(message) {
@@ -27,6 +28,7 @@ function PokemonCard() {
     rollPokemon,
     submitGuess,
     isCardReady,
+    backend
   } = usePokemonGame();
 
   return (
@@ -116,8 +118,13 @@ function PokemonCard() {
               {message}
             </p>
           )}
-        </div>
+        </div> //End guess section panel
       )}
+
+        <div>
+          {/* <BackendApi/> */}
+        </div>
+        
     </div>
   );
 }
