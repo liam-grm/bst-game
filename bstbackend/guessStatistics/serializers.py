@@ -1,8 +1,17 @@
 # Serializers convert the model instantces to JSON so that the frontend can work with the data
 from rest_framework import serializers
-from .models import guessAttempt
+from .models import GuessAttempt
 
-class guessSerializer(serializers.ModelSerializer):
+class GuessAttemptSerializer(serializers.ModelSerializer):
     class Meta:
-        model = guessAttempt # Specifies model to work with
-        fields = ('id', 'pokemon', 'correct') # Fields to be converted
+        model = GuessAttempt # model
+        fields = ('id', 'pokemon', 'correct', 'created_at') 
+        read_only_fields = ('id','created_at')
+
+    def validate_pokemon(self, value):
+        return value.strip().lower()
+    
+class GuessAttemptCreateResponseSerializer(serializers.Serializer):
+    attempt = GuessAttemptSerializer()            #document the enriched response structure
+    global_stats = serializers.DictField()
+    pokemon_stats = serializers.DictField()

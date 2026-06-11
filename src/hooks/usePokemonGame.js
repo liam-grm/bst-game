@@ -1,5 +1,5 @@
-import React, { useCallback, useState, useEffect } from 'react';
-import axios from 'axios';
+import { useCallback, useState } from 'react';
+import { recordGuess } from '../api/guessApi';
 import getRandomMoves, { formatText } from '../statUtils';
 
 const MAX_POKEMON_ID = 1025;
@@ -36,24 +36,23 @@ export function usePokemonGame() {
   const [pokemon, setPokemon] = useState(null);
   const [species, setSpecies] = useState(null);
   const [error, setError] = useState('');
-  const [message, setMessage] = useState('');
   const [moveset, setMoveset] = useState([]);
   const [generation, setGeneration] = useState(null);
   const [loading, setLoading] = useState(false);
-
-
+  const [guessing, setGuessing] = useState(false);
+  const [resultModal, setResultModal] = useState(null);
 
   const rollPokemon = useCallback(async () => {
     setLoading(true);
     setError('');
-    setMessage('');
+    setResultModal(null);
+    setInput('');
     setPokemon(null);
     setSpecies(null);
     setMoveset([]);
     setGeneration(null);
 
     const randomId = Math.floor(Math.random() * MAX_POKEMON_ID);
-    
 
     try {
       const pokemonData = await fetchJson(
@@ -79,23 +78,40 @@ export function usePokemonGame() {
   }, []);
 
   const submitGuess = useCallback(
-    (event) => {
+    async (event) => {
       event.preventDefault();
-      if (!pokemon) {
+      if (!pokemon || guessing) {
         return;
       }
 
       const guess = input.trim().toLowerCase();
       const answer = formatText(pokemon.name).toLowerCase();
+      const correct = guess === answer;
 
-      setMessage(
-        guess === answer
-          ? 'Correct!'
-          : `Wrong! The Pokemon is ${formatText(pokemon.name)}`,
-      );
+      setGuessing(true);
+      try {
+        const data = await recordGuess(pokemon.name, correct);
+        setResultModal({
+          correct,
+          pokemon,
+          globalStats: data.global_stats,
+          pokemonStats: data.pokemon_stats,
+        });
+      } catch {
+        setResultModal({
+          correct,
+          pokemon,
+          globalStats: null,
+          pokemonStats: null,
+        });
+      } finally {
+        setGuessing(false);
+      }
     },
-    [input, pokemon],
+    [input, pokemon, guessing],
   );
+
+  const closeResultModal = useCallback(() => setResultModal(null), []);
 
   const isCardReady = Boolean(pokemon && species);
 
@@ -105,12 +121,14 @@ export function usePokemonGame() {
     pokemon,
     species,
     error,
-    message,
     moveset,
     generation,
     loading,
+    guessing,
     rollPokemon,
     submitGuess,
     isCardReady,
+    resultModal,
+    closeResultModal,
   };
 }

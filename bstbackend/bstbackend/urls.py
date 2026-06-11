@@ -20,7 +20,7 @@ from rest_framework import routers
 from guessStatistics import views
 
 router = routers.DefaultRouter()
-router.register(r'guessAttempts', views.guessView, 'guessAttempt')
+router.register(r'guessAttempts', views.GuessAttemptViewSet, 'guessAttempt')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

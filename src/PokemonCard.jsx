@@ -4,15 +4,8 @@ import Shape from './Shape';
 import Abilities from './Abilities';
 import GenerationInfo from './GenerationInfo';
 import Moveset from './Moveset';
-//import BackendApi from './BackendApi';
+import GuessResultModal from './GuessResultModal';
 import { usePokemonGame } from './hooks/usePokemonGame';
-
-function guessMessageClass(message) {
-  if (!message) return '';
-  if (message.startsWith('Correct')) return 'guess-message--correct';
-  if (message.startsWith('Wrong')) return 'guess-message--wrong';
-  return '';
-}
 
 function PokemonCard() {
   const {
@@ -21,14 +14,15 @@ function PokemonCard() {
     pokemon,
     species,
     error,
-    message,
     moveset,
     generation,
     loading,
+    guessing,
     rollPokemon,
     submitGuess,
     isCardReady,
-    backend
+    resultModal,
+    closeResultModal,
   } = usePokemonGame();
 
   return (
@@ -107,24 +101,21 @@ function PokemonCard() {
                 onChange={(event) => setInput(event.target.value)}
                 placeholder="Who's that Pokémon?"
                 autoComplete="off"
+                disabled={guessing || Boolean(resultModal)}
               />
-              <button type="submit" className="btn btn-primary">
-                Guess
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={guessing || Boolean(resultModal)}
+              >
+                {guessing ? 'Checking…' : 'Guess'}
               </button>
             </div>
           </form>
-          {message && (
-            <p className={`guess-message ${guessMessageClass(message)}`}>
-              {message}
-            </p>
-          )}
-        </div> //End guess section panel
+        </div>
       )}
 
-        <div>
-          {/* <BackendApi/> */}
-        </div>
-        
+      <GuessResultModal result={resultModal} onClose={closeResultModal} />
     </div>
   );
 }
