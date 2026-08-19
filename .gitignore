@@ -22,3 +22,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Python / Django
+__pycache__
+*.py[cod]
+.venv
+venv
+.env
+bstbackend/db.sqlite3
+bstbackend/staticfiles
